@@ -140,7 +140,7 @@ void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2,
 void flatten_ongpu(float *x, int spatial, int layers, int batch, int forward, float *out);
 
 void upsample_gpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
-
+void upsample_gpu2(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
 void softmax_tree_gpu(float *input, int spatial, int batch, int stride, float temp, float *output, tree hier);
 
 void fix_nan_and_inf(float *input, size_t size);

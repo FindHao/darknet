@@ -588,11 +588,7 @@ convolutional_layer make_convolutional_layer(int batch, int steps, int h, int w,
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = l.w * l.h * l.c;
     l.activation = activation;
-    if(train){
-        l.output = (float*)xcalloc(total_batch*l.outputs, sizeof(float));
-    }else{
-        l.output = (float*)xmalloc(total_batch*l.outputs * sizeof(float));
-    }
+    l.output = (float *)xcalloc(total_batch * l.outputs, sizeof(float));
 #ifndef GPU
     if (train) l.delta = (float*)xcalloc(total_batch*l.outputs, sizeof(float));
 #endif  // not GPU
@@ -720,8 +716,7 @@ convolutional_layer make_convolutional_layer(int batch, int steps, int h, int w,
             if (train) l.bias_updates_gpu = cuda_make_array(l.bias_updates, n);
         }
 
-        // l.output_gpu = cuda_make_array(l.output, total_batch*out_h*out_w*n);
-        l.output_gpu = cuda_make_array(NULL, total_batch*out_h*out_w*n);
+        l.output_gpu = cuda_make_array(l.output, total_batch*out_h*out_w*n);
         if (train) l.delta_gpu = cuda_make_array(l.delta, total_batch*out_h*out_w*n);
 
         if(binary){
