@@ -691,12 +691,12 @@ convolutional_layer make_convolutional_layer(int batch, int steps, int h, int w,
         if (l.deform) l.weight_deform_gpu = cuda_make_array(NULL, l.nweights);
 
         if (adam) {
-            l.m_gpu = cuda_make_array(l.m, l.nweights);
-            l.v_gpu = cuda_make_array(l.v, l.nweights);
-            l.bias_m_gpu = cuda_make_array(l.bias_m, n);
-            l.bias_v_gpu = cuda_make_array(l.bias_v, n);
-            l.scale_m_gpu = cuda_make_array(l.scale_m, n);
-            l.scale_v_gpu = cuda_make_array(l.scale_v, n);
+            l.m_gpu = cuda_make_array_init2zero(l.nweights);
+            l.v_gpu = cuda_make_array_init2zero(l.nweights);
+            l.bias_m_gpu = cuda_make_array_init2zero(n);
+            l.bias_v_gpu = cuda_make_array_init2zero(n);
+            l.scale_m_gpu = cuda_make_array_init2zero(n);
+            l.scale_v_gpu = cuda_make_array_init2zero(n);
         }
         if (l.share_layer) {
             l.weights_gpu = l.share_layer->weights_gpu;
@@ -718,7 +718,7 @@ convolutional_layer make_convolutional_layer(int batch, int steps, int h, int w,
         }
 
         l.output_gpu = cuda_make_array_init2zero(total_batch*out_h*out_w*n);
-        if (train) l.delta_gpu = cuda_make_array(l.delta, total_batch*out_h*out_w*n);
+        if (train) l.delta_gpu = cuda_make_array_init2zero(total_batch*out_h*out_w*n);
 
         if(binary){
             l.binary_weights_gpu = cuda_make_array(l.weights, l.nweights);
