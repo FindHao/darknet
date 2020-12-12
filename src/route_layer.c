@@ -25,7 +25,7 @@ route_layer make_route_layer(int batch, int n, int *input_layers, int *input_siz
     l.outputs = outputs;
     l.inputs = outputs;
     //fprintf(stderr, " inputs = %d \t outputs = %d, groups = %d, group_id = %d \n", l.inputs, l.outputs, l.groups, l.group_id);
-    l.delta = (float*)xcalloc(outputs * batch, sizeof(float));
+    // l.delta = (float*)xcalloc(outputs * batch, sizeof(float));
     l.output = (float*)xcalloc(outputs * batch, sizeof(float));
 
     l.forward = forward_route_layer;
@@ -34,7 +34,7 @@ route_layer make_route_layer(int batch, int n, int *input_layers, int *input_siz
     l.forward_gpu = forward_route_layer_gpu;
     l.backward_gpu = backward_route_layer_gpu;
 
-    l.delta_gpu =  cuda_make_array_init2zero(outputs*batch);
+    // l.delta_gpu =  cuda_make_array_init2zero(outputs*batch);
     l.output_gpu = cuda_make_array_init2zero(outputs*batch);
     #endif
     return l;
