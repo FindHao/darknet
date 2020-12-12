@@ -560,7 +560,7 @@ convolutional_layer make_convolutional_layer(int batch, int steps, int h, int w,
         l.bias_updates = l.share_layer->bias_updates;
     }
     else {
-        l.weights = (float*)xcalloc(l.nweights, sizeof(float));
+        l.weights = (float*)xmalloc(l.nweights * sizeof(float));
         l.biases = (float*)xcalloc(n, sizeof(float));
 
         if (train) {
@@ -707,7 +707,7 @@ convolutional_layer make_convolutional_layer(int batch, int steps, int h, int w,
             l.bias_updates_gpu = l.share_layer->bias_updates_gpu;
         }
         else {
-            l.weights_gpu = cuda_make_array(l.weights, l.nweights);
+            l.weights_gpu = cuda_make_array(NULL, l.nweights);
             if (train) l.weight_updates_gpu = cuda_make_array(l.weight_updates, l.nweights);
 #ifdef CUDNN_HALF
             l.weights_gpu16 = cuda_make_array(NULL, l.nweights / 2 + 1);
