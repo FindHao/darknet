@@ -756,8 +756,8 @@ convolutional_layer make_convolutional_layer(int batch, int steps, int h, int w,
 #endif  // CUDNN
                 }
 
-                l.rolling_mean_gpu = cuda_make_array(l.mean, n);
-                l.rolling_variance_gpu = cuda_make_array(l.variance, n);
+                // l.rolling_mean_gpu = cuda_make_array(l.mean, n);
+                // l.rolling_variance_gpu = cuda_make_array(l.variance, n);
             }
 
             if (train) {

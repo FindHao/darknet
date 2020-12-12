@@ -1232,8 +1232,8 @@ void push_convolutional_layer(convolutional_layer l)
     }
     if (l.batch_normalize){
         cuda_push_array(l.scales_gpu, l.scales, l.n);
-        cuda_push_array(l.rolling_mean_gpu, l.rolling_mean, l.n);
-        cuda_push_array(l.rolling_variance_gpu, l.rolling_variance, l.n);
+        // cuda_push_array(l.rolling_mean_gpu, l.rolling_mean, l.n);
+        // cuda_push_array(l.rolling_variance_gpu, l.rolling_variance, l.n);
     }
     if (l.adam){
         cuda_push_array(l.m_gpu, l.m, l.nweights);
