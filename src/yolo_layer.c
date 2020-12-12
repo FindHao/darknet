@@ -49,8 +49,8 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     l.class_ids = (int*)xcalloc(batch * l.w*l.h*l.n, sizeof(int));
     for (i = 0; i < batch * l.w*l.h*l.n; ++i) l.class_ids[i] = -1;
 
-    l.delta = (float*)xcalloc(batch * l.outputs, sizeof(float));
-    l.output = (float*)xcalloc(batch * l.outputs, sizeof(float));
+    // l.delta = (float*)xcalloc(batch * l.outputs, sizeof(float));
+    // l.output = (float*)xcalloc(batch * l.outputs, sizeof(float));
     for(i = 0; i < total*2; ++i){
         l.biases[i] = .5;
     }
@@ -61,8 +61,8 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     l.forward_gpu = forward_yolo_layer_gpu;
     l.backward_gpu = backward_yolo_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, batch*l.outputs);
-    l.output_avg_gpu = cuda_make_array(l.output, batch*l.outputs);
-    l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
+    // l.output_avg_gpu = cuda_make_array(l.output, batch*l.outputs);
+    // l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
 
     free(l.output);
     if (cudaSuccess == cudaHostAlloc(&l.output, batch*l.outputs*sizeof(float), cudaHostRegisterMapped)) l.output_pinned = 1;
