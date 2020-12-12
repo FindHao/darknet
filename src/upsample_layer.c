@@ -35,7 +35,7 @@ layer make_upsample_layer(int batch, int w, int h, int c, int stride)
     l.backward_gpu = backward_upsample_layer_gpu;
 
     l.delta_gpu =  cuda_make_array(l.delta, l.outputs*batch);
-    l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
+    l.output_gpu = cuda_make_array(NULL, l.outputs*batch);
     #endif
     if(l.reverse) fprintf(stderr, "downsample              %2dx  %4d x%4d x%4d -> %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
     else fprintf(stderr, "upsample                %2dx  %4d x%4d x%4d -> %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
