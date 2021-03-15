@@ -2237,7 +2237,9 @@ __global__ void im2col_gpu_kernel_ext(const int n, const float* data_im,
     const int dilation_h, const int dilation_w,
     const int height_col, const int width_col,
     float* data_col) {
-    CUDA_KERNEL_LOOP(index, n) {
+    #pragma unroll 8
+    for (int index = blockIdx.x * blockDim.x + threadIdx.x; index < n; index += blockDim.x * gridDim.x){
+    // CUDA_KERNEL_LOOP(index, n) {
         const int h_index = index / width_col;
         const int h_col = h_index % height_col;
         const int w_col = index % width_col;
