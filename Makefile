@@ -1,4 +1,4 @@
-GPU=0
+GPU=1
 CUDNN=0
 CUDNN_HALF=0
 OPENCV=0
@@ -17,10 +17,6 @@ ZED_CAMERA_v2_8=0
 USE_CPP=0
 DEBUG=0
 
-ARCH= -gencode arch=compute_35,code=sm_35 \
-      -gencode arch=compute_50,code=[sm_50,compute_50] \
-      -gencode arch=compute_52,code=[sm_52,compute_52] \
-	    -gencode arch=compute_61,code=[sm_61,compute_61]
 
 OS := $(shell uname)
 
@@ -37,7 +33,7 @@ OS := $(shell uname)
 # ARCH= -gencode arch=compute_70,code=[sm_70,compute_70]
 
 # GeForce RTX 2080 Ti, RTX 2080, RTX 2070, Quadro RTX 8000, Quadro RTX 6000, Quadro RTX 5000, Tesla T4, XNOR Tensor Cores
-# ARCH= -gencode arch=compute_75,code=[sm_75,compute_75]
+ARCH= -gencode arch=compute_75,code=[sm_75,compute_75]
 
 # Jetson XAVIER
 # ARCH= -gencode arch=compute_72,code=[sm_72,compute_72]
@@ -78,7 +74,9 @@ NVCC=nvcc
 OPTS=-Ofast
 LDFLAGS= -lm -pthread
 COMMON= -Iinclude/ -I3rdparty/stb/include
-CFLAGS=-Wall -Wfatal-errors -Wno-unused-result -Wno-unknown-pragmas -fPIC
+CFLAGS=-Wall -Wfatal-errors -Wno-unused-result -Wno-unknown-pragmas -fPIC -g
+NVCCFLAGS= -lineinfo
+CUDA_PATH?=/usr/local/cuda
 
 ifeq ($(DEBUG), 1)
 #OPTS= -O0 -g
@@ -114,20 +112,20 @@ LDFLAGS+= -lgomp
 endif
 
 ifeq ($(GPU), 1)
-COMMON+= -DGPU -I/usr/local/cuda/include/
+COMMON+= -DGPU -I$(CUDA_PATH)/include/
 CFLAGS+= -DGPU
 ifeq ($(OS),Darwin) #MAC
-LDFLAGS+= -L/usr/local/cuda/lib -lcuda -lcudart -lcublas -lcurand
+LDFLAGS+= -L$(CUDA_PATH)/lib -lcuda -lcudart -lcublas -lcurand
 else
-LDFLAGS+= -L/usr/local/cuda/lib64 -lcuda -lcudart -lcublas -lcurand
+LDFLAGS+= -L$(CUDA_PATH)/lib64 -lcuda -lcudart -lcublas -lcurand
 endif
 endif
 
 ifeq ($(CUDNN), 1)
 COMMON+= -DCUDNN
 ifeq ($(OS),Darwin) #MAC
-CFLAGS+= -DCUDNN -I/usr/local/cuda/include
-LDFLAGS+= -L/usr/local/cuda/lib -lcudnn
+CFLAGS+= -DCUDNN -I$(CUDA_PATH)/include
+LDFLAGS+= -L$(CUDA_PATH)/lib -lcudnn
 else
 CFLAGS+= -DCUDNN -I/usr/local/cudnn/include
 LDFLAGS+= -L/usr/local/cudnn/lib64 -lcudnn
@@ -182,7 +180,7 @@ $(OBJDIR)%.o: %.cpp $(DEPS)
 	$(CPP) -std=c++11 $(COMMON) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)%.o: %.cu $(DEPS)
-	$(NVCC) $(ARCH) $(COMMON) --compiler-options "$(CFLAGS)" -c $< -o $@
+	$(NVCC) $(ARCH) $(COMMON) --compiler-options "$(CFLAGS)" $(NVCCFLAGS)  -c $< -o $@
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)

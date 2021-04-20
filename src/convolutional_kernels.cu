@@ -556,7 +556,7 @@ void forward_convolutional_layer_gpu(convolutional_layer l, network_state state)
 
 
 #else
-    fill_ongpu(l.outputs*l.batch, 0, l.output_gpu, 1);
+    //fill_ongpu(l.outputs*l.batch, 0, l.output_gpu, 1);
 
     int i, j;
     int m = l.n / l.groups;
