@@ -586,7 +586,7 @@ void forward_convolutional_layer_gpu(convolutional_layer l, network_state state)
 
             }
             //gemm_ongpu(0, 0, m, n, k, 1., a, k, b, n, 1., c + i*m*n, n);
-            gemm_ongpu(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
+            gemm_ongpu(0, 0, m, n, k, 1, a, k, b, n, 0, c, n);
         }
     }
 
